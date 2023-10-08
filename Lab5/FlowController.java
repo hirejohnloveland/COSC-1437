@@ -2,26 +2,15 @@ package Lab5;
 
 import java.util.ArrayList;
 
+import org.w3c.dom.css.ViewCSS;
+
 public class FlowController {
-    public void optimizeNetwork(ArrayList<ShippingNode> nodes) {
+    public void optimizeNetwork(ArrayList<ShippingNode> nodes, ArrayList<Vehicle> vehicles) {
         String startName = "Abaca";
         ShippingNode start = ShippingNode.getNodeByName(nodes, startName);
 
         String endName = "Chiano";
         ShippingNode end = ShippingNode.getNodeByName(nodes, endName);
-
-        String vehicleNodeName = "Brecha";
-        ShippingNode vehicleStartNode = ShippingNode.getNodeByName(nodes, vehicleNodeName);
-
-        Vehicle vehicle1 = new Vehicle(VehicleType.fromString("road"));
-        vehicle1.setCurrentNode(vehicleStartNode);
-
-        Vehicle vehicle2 = new Vehicle(VehicleType.fromString("water"));
-        vehicle2.setCurrentNode(end);
-
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
-        vehicles.add(vehicle1);
-        vehicles.add(vehicle2);
 
         VehiclePath vehiclePath = Vehicle.getOpenShortestPath(start, vehicles);
         ShippingNode.resetNodes(nodes);
@@ -29,7 +18,7 @@ public class FlowController {
         var path = PathFinder.findPath(start, end, vehiclePath.vehicle);
         vehiclePath.vehicle.setCurrentNode(end);
         ShippingNode.resetNodes(nodes);
-        OutputResults.printToConsole(path, vehiclePath.path);
+        OutputResults.printToConsole(path, vehiclePath);
 
         startName = "Brecha";
         start = ShippingNode.getNodeByName(nodes, startName);
@@ -43,7 +32,7 @@ public class FlowController {
         path = PathFinder.findPath(start, end, vehiclePath.vehicle);
         vehiclePath.vehicle.setCurrentNode(end);
         ShippingNode.resetNodes(nodes);
-        OutputResults.printToConsole(path, vehiclePath.path);
+        OutputResults.printToConsole(path, vehiclePath);
 
     }
 

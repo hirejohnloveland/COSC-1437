@@ -7,16 +7,18 @@ import java.util.Map;
 public class Vehicle {
 
     private VehicleType type;
+    private String name;
     private ShippingNode currentNode;
-    private boolean isAvailable;
 
-    public Vehicle(VehicleType vehicleType) {
+    public Vehicle(VehicleType vehicleType, String name, ShippingNode startingNode) {
         this.type = vehicleType;
-        this.isAvailable = true;
+        this.name = name;
+        this.currentNode = startingNode;
+
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public String getName() {
+        return this.name;
     }
 
     public void setCurrentNode(ShippingNode nextNode) {

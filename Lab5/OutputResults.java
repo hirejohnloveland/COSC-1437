@@ -1,7 +1,11 @@
 package Lab5;
 
 public class OutputResults {
-    public static void printToConsole(Path path, Path vehiclePath) {
+    public static void printToConsole(Path path, VehiclePath pathToStart) {
+        String vehicleName = pathToStart.vehicle.getName();
+        Path vehiclePath = pathToStart.path;
+
+        System.out.println("Vehicle Chosen " + vehicleName);
         System.out.println("The vehicle Path to start is as follows: ");
         for (ShippingNode node : vehiclePath.getNodes()) {
             System.out.println(node.getName());

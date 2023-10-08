@@ -1,10 +1,10 @@
 package Lab5;
 
 public enum VehicleType {
-    TRUCK(5, "road"),
-    AIRSHIP(25, "air"),
-    SHIP(15, "water"),
-    TRAIN(100, "rail");
+    ROAD(5, "road"),
+    AIR(25, "air"),
+    WATER(15, "water"),
+    RAIL(100, "rail");
 
     private final int weight;
     private final String type;

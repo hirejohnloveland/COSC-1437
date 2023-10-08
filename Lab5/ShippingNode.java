@@ -73,22 +73,4 @@ public class ShippingNode {
 
         }
     }
-
-    // Override to allow a comparison of nodes based on names using List.contains()
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        ShippingNode otherNode = (ShippingNode) obj;
-        return name.equals(otherNode.name);
-    }
-
-    // Override for consistancy to match equals override, so hash comparison output
-    // matches List.contains();
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
 }
