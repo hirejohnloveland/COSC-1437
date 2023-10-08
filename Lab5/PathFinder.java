@@ -10,37 +10,10 @@ import java.util.Comparator;
 // With A* I was continually fighting the code to make it not
 // exit prematurely.
 public class PathFinder {
-	public static Path findPath(ShippingNode start, ShippingNode end, ArrayList<Vehicle> vehicles) {
-		Path bestPath = null;
-		int shortestTime = Integer.MAX_VALUE;
+	public static Path findPath(ShippingNode start, ShippingNode end, Vehicle vehicle) {
 
-		for (Vehicle vehicle : vehicles) {
-			int timeForVehicleToStart = vehicle.getTimeToNode(start);
-			Path currentPath = findPathForVehicle(start, end, vehicle, timeForVehicleToStart);
-			if (currentPath != null && currentPath.getCumulativeTime() < shortestTime) {
-				shortestTime = currentPath.getCumulativeTime();
-				bestPath = currentPath;
-			}
-		}
-
-		return bestPath;
-	}
-
-	private static Path findPathForVehicle(ShippingNode start, ShippingNode end, Vehicle vehicle,
-			int timeForVehicleToStart) {
-		Path computedPath = findPathWithVehicle(start, end, vehicle);
-
-		if (computedPath != null) {
-			computedPath.addTransitTime(timeForVehicleToStart);
-		}
-
-		return computedPath;
-	}
-
-	public static Path findPathWithVehicle(ShippingNode start, ShippingNode end, Vehicle vehicle) {
 		ArrayList<ShippingNode> open = new ArrayList<ShippingNode>();
 		ArrayList<ShippingNode> closed = new ArrayList<ShippingNode>();
-
 		Path initialpath = new Path();
 		initialpath.addNodeToPath(start, 0, 0);
 		start.setPath(initialpath);
@@ -85,9 +58,7 @@ public class PathFinder {
 				}
 			}
 			closed.add(current);
-			current.markVisited();
 		}
-		System.out.println("End Node Time is " + end.getTime());
 		return end.getPath() != null ? end.getPath() : null;
 	}
 }

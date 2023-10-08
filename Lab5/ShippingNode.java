@@ -1,12 +1,12 @@
 package Lab5;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ShippingNode {
     private String name;
     private Path pathToGetTo = new Path();
-    private boolean isVisited = false;
     private ArrayList<ShippingNodeConnection> neighbors = new ArrayList<>();
 
     public ShippingNode(String name) {
@@ -16,18 +16,6 @@ public class ShippingNode {
 
     public String getName() {
         return name;
-    }
-
-    public boolean isVisited() {
-        return isVisited;
-    }
-
-    public void markVisited() {
-        this.isVisited = true;
-    }
-
-    public void markUnvisited() {
-        this.isVisited = false;
     }
 
     public Path getPath() {
@@ -77,6 +65,13 @@ public class ShippingNode {
             VehicleType type) {
         ShippingNodeConnection newConnection = new ShippingNodeConnection(id, fromNode, toNode, cost, time, type);
         fromNode.addNeighbor(newConnection);
+    }
+
+    public static void resetNodes(List<ShippingNode> nodes) {
+        for (ShippingNode node : nodes) {
+            node.setPath(new Path());
+
+        }
     }
 
     // Override to allow a comparison of nodes based on names using List.contains()
