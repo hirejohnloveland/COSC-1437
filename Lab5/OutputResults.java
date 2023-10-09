@@ -10,17 +10,28 @@ public class OutputResults {
         for (ShippingNode node : vehiclePath.getNodes()) {
             System.out.println(node.getName());
         }
-        System.out.println("Transit cost to start is " + vehiclePath.getCumulativeCost());
-        System.out.println("Transit time to start is " + vehiclePath.getCumulativeTime());
+        System.out.println("Transit cost to start is " + vehiclePath.getCost());
+        System.out.println("Transit time to start is " + vehiclePath.getTime());
 
         System.out.println("The vehicle Path from start to end is as follows: ");
         for (ShippingNode node : path.getNodes()) {
             System.out.println(node.getName());
         }
-        System.out.println("Transit cost from start is " + path.getCumulativeCost());
-        System.out.println("Transit time from start is " + path.getCumulativeTime());
+        System.out.println("Transit cost from start is " + path.getCost());
+        System.out.println("Transit time from start is " + path.getTime());
 
-        System.out.println("Cumulative Time is " + (path.getCumulativeTime() + vehiclePath.getCumulativeTime()));
-        System.out.println("Cumulative Cost is " + (path.getCumulativeCost() + vehiclePath.getCumulativeCost()));
+        System.out.println("Time is " + (path.getTime() + vehiclePath.getTime()));
+        System.out.println("Cost is " + (path.getCost() + vehiclePath.getCost()));
+    }
+
+    public static void printToConsole(Path path) {
+
+        System.out.println("The Path from start to end is as follows: ");
+        for (ShippingNode node : path.getNodes()) {
+            System.out.println(node.getName());
+        }
+        System.out.println("Transit cost from start is " + path.getCost());
+        System.out.println("Transit time from start is " + path.getTime());
+
     }
 }

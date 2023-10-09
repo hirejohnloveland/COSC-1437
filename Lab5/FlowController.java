@@ -2,23 +2,22 @@ package Lab5;
 
 import java.util.ArrayList;
 
-import org.w3c.dom.css.ViewCSS;
-
 public class FlowController {
     public void optimizeNetwork(ArrayList<ShippingNode> nodes, ArrayList<Vehicle> vehicles) {
         String startName = "Abaca";
         ShippingNode start = ShippingNode.getNodeByName(nodes, startName);
 
-        String endName = "Chiano";
+        String endName = "Dolton";
         ShippingNode end = ShippingNode.getNodeByName(nodes, endName);
 
-        VehiclePath vehiclePath = Vehicle.getOpenShortestPath(start, vehicles);
-        ShippingNode.resetNodes(nodes);
+        System.out.println("\nThis trip is from " + startName + " to " + endName + "\n");
 
-        var path = PathFinder.findPath(start, end, vehiclePath.vehicle);
-        vehiclePath.vehicle.setCurrentNode(end);
+        MultiPathSearch multiPathSearch = new MultiPathSearch();
+        Path bestPath = multiPathSearch.findBestMultiPath(start, end, vehicles);
+
+        OutputResults.printToConsole(bestPath);
+
         ShippingNode.resetNodes(nodes);
-        OutputResults.printToConsole(path, vehiclePath);
 
         startName = "Brecha";
         start = ShippingNode.getNodeByName(nodes, startName);
@@ -26,13 +25,10 @@ public class FlowController {
         endName = "Chiano";
         end = ShippingNode.getNodeByName(nodes, endName);
 
-        vehiclePath = Vehicle.getOpenShortestPath(start, vehicles);
+        System.out.println("\nThis trip is from " + startName + " to " + endName + "\n");
+        bestPath = multiPathSearch.findBestMultiPath(start, end, vehicles);
 
-        ShippingNode.resetNodes(nodes);
-        path = PathFinder.findPath(start, end, vehiclePath.vehicle);
-        vehiclePath.vehicle.setCurrentNode(end);
-        ShippingNode.resetNodes(nodes);
-        OutputResults.printToConsole(path, vehiclePath);
+        OutputResults.printToConsole(bestPath);
 
     }
 

@@ -23,12 +23,8 @@ public class ShippingNodeConnection {
         return this.id;
     }
 
-    public ShippingNode getNodeConnection(ShippingNode node) {
-        if (node.equals(fromNode)) {
-            return toNode;
-        } else {
-            return fromNode;
-        }
+    public ShippingNode getDestinationNode() {
+        return toNode;
     }
 
     public int getCost() {

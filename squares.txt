@@ -1,14 +1,15 @@
 #network
 #id start    end     cost    time    type
-2    Abaca    Brecha    1    2    road
-3    Abaca    Chiano    5    8    road
-9   Brecha    Abaca    2    4    road
-10  Brecha    Chiano     5    1    road
-11  Chiano    Abaca    2    1    road
-12  Chiano    Brecha     5    5    road
+3   Abaca    Chiano    1    1    water
+4   Abaca    Chiano    1    20   road
+9   Brecha   Abaca     1    1    water
+11  Chiano   Abaca     1    20    road
+16  Chiano   Dolton    1    1    road
+
 
 
 #vehicles
 #type	Name	starting location (they have to start somewhere)
-road	Express	Brecha
-road    Express1 Brecha
+water   The_Dawn_Treader     Brecha
+road    Jeepers_Creepers     Chiano
+

@@ -11,7 +11,7 @@ import java.util.Comparator;
 // exit prematurely.
 public class PathFinder {
 	public static Path findPath(ShippingNode start, ShippingNode end, Vehicle vehicle) {
-
+		start.resetNodeAndAllOtherNodes();
 		ArrayList<ShippingNode> open = new ArrayList<ShippingNode>();
 		ArrayList<ShippingNode> closed = new ArrayList<ShippingNode>();
 		Path initialpath = new Path();
@@ -35,7 +35,7 @@ public class PathFinder {
 					continue;
 				}
 				// Find the time of the connection to the neighbor
-				ShippingNode neighborNode = connection.getNodeConnection(current);
+				ShippingNode neighborNode = connection.getDestinationNode();
 				int tentativeTime = current.getTime() + connection.getTime();
 
 				if (closed.contains(neighborNode)) {
@@ -46,7 +46,7 @@ public class PathFinder {
 					// Set path and cost for connection to neighbor if we have
 					// found a better path
 
-					Path newPath = current.getPath().copy();
+					Path newPath = current.getPath().deepCopy();
 					newPath.addNodeToPath(neighborNode, connection.getCost(), connection.getTime());
 					neighborNode.setPath(newPath);
 
