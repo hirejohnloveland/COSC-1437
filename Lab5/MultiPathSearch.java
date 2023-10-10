@@ -15,14 +15,15 @@ public class MultiPathSearch {
         bestPath = null;
 
         // Call the depth first search with the current (0th index) vehicle
-        dfsSearch(new Path(), start, vehicles.get(0));
+        dfsSearch(new Path(), start, null, null);
 
         // Return the best path and null the state
         return finalizeAndReset();
     }
 
-    private void dfsSearch(Path currentPath, ShippingNode currentNode, Vehicle currentVehicle) {
-        System.out.println("Current Node: " + currentNode.getName() + ", Current Vehicle: " + currentVehicle.getName()
+    private void dfsSearch(Path currentPath, ShippingNode currentNode, ShippingNodeConnection lastConnection,
+            Vehicle currentVehicle) {
+        System.out.println("Current Node: " + currentNode.getName()
                 + ", Current Path: " + currentPath.toString());
         // Return condition when we reach the target, we evaluate for every connection
         // until we find the best path, then function returns back up the chain to the
@@ -38,13 +39,13 @@ public class MultiPathSearch {
 
         // We haven't reached the target and also haven't got better path - backtrack
         if (bestPath != null && currentPath.getTime() >= bestPath.getTime()) {
-            System.out.println("Backtracking from node: " + currentNode.getName()
+            System.out.println("Backtracking from connection to node: " + currentNode.getName()
                     + ". Reason: A shorter path was found previously.");
             return;
         }
 
         // We have already covered this node as it's on the path - backtrack
-        if (currentPath.contains(currentNode)) {
+        if (currentPath.containsExcludingLast(currentNode)) {
             System.out.println("Backtracking from node: " + currentNode.getName()
                     + ". Reason: Node already visited in the current path.");
             return;
@@ -56,30 +57,26 @@ public class MultiPathSearch {
         for (ShippingNodeConnection connection : currentNode.getNeighbors()) {
             ShippingNode destinationNode = connection.getDestinationNode();
             System.out
-                    .println("Evaluating connection from " + currentNode.getName() + destinationNode.getName() + " via "
+                    .println("Evaluating connection from " + currentNode.getName() + " to " + destinationNode.getName()
+                            + " via "
                             + connection.getType());
             Path transitPath = new Path();
             // Add the destination node to path in the first position (will be reversed once
             // we have the vehicle path)
-            transitPath.addNodeToPath(destinationNode, connection.getCost(), connection.getTime());
+            transitPath.addConnectionToPath(connection);
 
-            // If the current vehicle is on the current node, and can also make the
-            // connection then attempt to find the best path using this vehicle
-            if (currentVehicle.getCurrentNode().equals(currentNode) && currentVehicle.canTraverse(connection)) {
-                tryMoveVehicle(currentVehicle, currentNode, destinationNode, transitPath);
-            }
-
-            // Iterate over the rest of the vehicles to see if they have a better path
+            // Iterate over all the vehicles that can make the trip to find the best path to
+            // the connection.
             for (Vehicle nextVehicle : vehicles) {
-                if (nextVehicle != currentVehicle && nextVehicle.canTraverse(connection)) {
-                    tryMoveVehicle(nextVehicle, currentNode, destinationNode, transitPath);
+                if (nextVehicle.canTraverse(connection)) {
+                    tryMoveVehicle(nextVehicle, currentNode, destinationNode, transitPath, connection);
                 }
             }
         }
     }
 
     private void tryMoveVehicle(Vehicle vehicle, ShippingNode currentNode, ShippingNode destinationNode,
-            Path transitPath) {
+            Path transitPath, ShippingNodeConnection connection) {
         System.out.println("Attempting to move vehicle: " + vehicle.getName() + " to " + destinationNode.getName());
         // Get the path from the vehicle's current position to the currentNode
         Path vehiclePath = vehicle.getPathToNode(currentNode);
@@ -92,7 +89,7 @@ public class MultiPathSearch {
         plannedMoves.add(move);
 
         // Recursive call
-        dfsSearch(newPath, destinationNode, vehicle);
+        dfsSearch(newPath, destinationNode, connection, vehicle);
 
         // After returning from the DFS call:
         plannedMoves.remove(plannedMoves.size() - 1);

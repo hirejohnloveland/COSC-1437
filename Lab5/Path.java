@@ -3,39 +3,32 @@ package Lab5;
 import java.util.ArrayList;
 
 public class Path {
-    private ArrayList<ShippingNode> nodesInPath;
+    private ArrayList<ShippingNodeConnection> connectionsInPath;
     private int cost;
     private int time;
 
     public Path() {
-        nodesInPath = new ArrayList<>();
+        connectionsInPath = new ArrayList<>();
     }
 
     public Path deepCopy() {
         Path newPath = new Path();
-        for (ShippingNode node : this.nodesInPath) {
-            newPath.getNodes().add(node);
+        for (ShippingNodeConnection connection : this.connectionsInPath) {
+            newPath.addConnectionToPath(connection);
         }
-        newPath.setTime(this.getTime());
-        newPath.setCost(this.getCost());
         return newPath;
     }
 
-    public Path concat(Path other) {
+    public Path concat(Path addPath) {
         Path newPath = this.deepCopy();
-        for (ShippingNode node : other.getNodes()) {
-            newPath.addNodeToPath(node);
+        for (ShippingNodeConnection connection : addPath.getConnections()) {
+            newPath.addConnectionToPath(connection);
         }
-        int newCost = newPath.getCost() + other.getCost();
-        newPath.setCost(newCost);
-        int newTime = newPath.getTime() + other.getTime();
-        newPath.setTime(newTime);
-
         return newPath;
     }
 
-    public ArrayList<ShippingNode> getNodes() {
-        return nodesInPath;
+    public ArrayList<ShippingNodeConnection> getConnections() {
+        return connectionsInPath;
     }
 
     public int getCost() {
@@ -58,22 +51,49 @@ public class Path {
         this.time = time;
     }
 
-    public void addNodeToPath(ShippingNode node, int cost, int time) {
-        this.nodesInPath.add(node);
-        this.cost += cost;
-        this.time += time;
+    public void addConnectionToPath(ShippingNodeConnection connection) {
+        this.connectionsInPath.add(connection);
+        this.cost += connection.getCost();
+        this.time += connection.getTime();
     }
 
-    private void addNodeToPath(ShippingNode node) {
-        this.nodesInPath.add(node);
+    public boolean contains(ShippingNodeConnection connection) {
+        return connectionsInPath.contains(connection);
     }
 
-    public boolean contains(ShippingNode node) {
-        return nodesInPath.contains(node);
+    public boolean containsExcludingLast(ShippingNode node) {
+        int size = connectionsInPath.size();
+        for (int i = 0; i < size - 1; i++) { // Exclude the last connection
+            ShippingNodeConnection connection = connectionsInPath.get(i);
+            if (node.equals(connection.getOriginNode()) || node.equals(connection.getDestinationNode())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isEmpty() {
-        return nodesInPath.isEmpty();
+        return connectionsInPath.isEmpty();
+    }
+
+    public boolean connectionIsVistedEarlier(ShippingNodeConnection testconnection) {
+        int size = connectionsInPath.size();
+
+        for (int i = 0; i < size - 1; i++) {
+            if (connectionsInPath.get(i).isSimilarConnection(testconnection)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean nodeIsVisitedEarlier(ShippingNode node) {
+        for (ShippingNodeConnection connection : getConnections()) {
+            if (connection.getOriginNode().equals(node) || connection.getDestinationNode().equals(node)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -82,8 +102,9 @@ public class Path {
         builder.append("Path Cost is " + cost).append("\n");
         builder.append("Path Time is " + time).append("\n");
         builder.append("Nodes in Path are as follows").append("\n");
-        for (ShippingNode node : nodesInPath) {
-            builder.append(node.getName()).append("\n");
+        for (ShippingNodeConnection connection : connectionsInPath) {
+            builder.append(connection.toString())
+                    .append("\n");
         }
         return builder.toString();
     }

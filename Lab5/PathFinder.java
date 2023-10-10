@@ -15,7 +15,6 @@ public class PathFinder {
 		ArrayList<ShippingNode> open = new ArrayList<ShippingNode>();
 		ArrayList<ShippingNode> closed = new ArrayList<ShippingNode>();
 		Path initialpath = new Path();
-		initialpath.addNodeToPath(start, 0, 0);
 		start.setPath(initialpath);
 		open.add(start);
 
@@ -47,7 +46,7 @@ public class PathFinder {
 					// found a better path
 
 					Path newPath = current.getPath().deepCopy();
-					newPath.addNodeToPath(neighborNode, connection.getCost(), connection.getTime());
+					newPath.addConnectionToPath(connection);
 					neighborNode.setPath(newPath);
 
 					// Add to open list if we haven't visited this node
