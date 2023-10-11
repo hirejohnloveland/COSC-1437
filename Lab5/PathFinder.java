@@ -3,12 +3,6 @@ package Lab5;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-// Slightly altered algorithm to use Dijkstra instead of A*
-// Did this because A* is better suited to coordinate plane problems or problems
-// where the individual peices are spatially related. Becuase the sites aren't
-// clearly spatially related, this problem lends itself to graph traversal.
-// With A* I was continually fighting the code to make it not
-// exit prematurely.
 public class PathFinder {
 	public static Path findPath(ShippingNode start, ShippingNode end, Vehicle vehicle) {
 		start.resetNodeAndAllOtherNodes();
@@ -58,6 +52,6 @@ public class PathFinder {
 			}
 			closed.add(current);
 		}
-		return end.getPath() != null ? end.getPath() : null;
+		return end.getPath().isEmpty() != true ? end.getPath() : null;
 	}
 }

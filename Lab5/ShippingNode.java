@@ -1,7 +1,6 @@
 package Lab5;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ShippingNode {
@@ -30,30 +29,19 @@ public class ShippingNode {
         return pathToGetTo.getCost();
     }
 
-    public void setCost(int cost) {
-        this.pathToGetTo.setCost(cost);
-    }
-
     public int getTime() {
         return this.pathToGetTo.getTime();
-    }
-
-    public void setTime(int time) {
-        this.pathToGetTo.setTime(time);
     }
 
     public ArrayList<ShippingNodeConnection> getNeighbors() {
         return neighbors;
     }
 
-    public void setNeighbors(ArrayList<ShippingNodeConnection> neighbors) {
-        this.neighbors = neighbors;
-    }
-
     public void addNeighbor(ShippingNodeConnection connection) {
         this.neighbors.add(connection);
     }
 
+    /// Remove at when you add cargo
     public static ShippingNode getNodeByName(ArrayList<ShippingNode> nodes, String name) {
         return nodes.stream()
                 .filter(node -> name.equals(node.getName()))
@@ -65,13 +53,6 @@ public class ShippingNode {
             VehicleType type) {
         ShippingNodeConnection newConnection = new ShippingNodeConnection(id, fromNode, toNode, cost, time, type);
         fromNode.addNeighbor(newConnection);
-    }
-
-    public static void resetNodes(List<ShippingNode> nodes) {
-        for (ShippingNode node : nodes) {
-            node.setPath(new Path());
-
-        }
     }
 
     // Recursive call to traverse graph and remove the paths at the beginning

@@ -1,21 +1,20 @@
 #network
 #id start    end     cost    time    type
-3   Abaca    Chiano    1    5    road
+3   Abaca    Chiano    1    1    road
 4   Abaca    Brecha    1    1    road
 5   Abaca    Dolton    1    1    road
-11  Brecha   Abaca     1    1    road
-16  Brecha   Chiano    1    1    road
-17  Brecha   Dolton    1    1    road
+11  Brecha   Abaca     1    5    road
+16  Brecha   Chiano    1    10    road
+17  Brecha   Dolton    1    7    road
 18  Chiano   Abaca     1    1    road
 19  Chiano   Brecha    1    1    road
 20  Chiano   Dolton    1    1    road
 21  Dolton   Abaca     1    1    road
-22  Dolton   Chiano    1    1    road
-
-
+22  Dolton   Chiano    1    9    road
 
 #vehicles
 #type	Name	starting location (they have to start somewhere)
-road    Jeepers_Creepers     Chiano
-road    Max_max              Dolton
+road    Jeepers_Creepers     Brecha
+road    Max_max              Chiano
+
 

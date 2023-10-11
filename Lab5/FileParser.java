@@ -61,7 +61,7 @@ public class FileParser {
                         String name = parts[1];
                         ShippingNode node = nodeMap.get(parts[2]);
 
-                        Vehicle vehicle = vehicleMap.computeIfAbsent(name, x -> new Vehicle(type, name, node));
+                        vehicleMap.computeIfAbsent(name, x -> new Vehicle(type, name, node));
                         break;
                     default:
                         throw new IOException("File Parser encountered a fatal error");

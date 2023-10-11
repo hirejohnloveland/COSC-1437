@@ -1,5 +1,9 @@
 package Lab5;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Vehicle {
 
     private VehicleType type;
@@ -10,15 +14,14 @@ public class Vehicle {
         this.type = vehicleType;
         this.name = name;
         this.currentNode = startingNode;
-
     }
 
     public String getName() {
         return this.name;
     }
 
-    public ShippingNode getCurrentNode() {
-        return currentNode;
+    public String getType() {
+        return type.getType();
     }
 
     public void setCurrentNode(ShippingNode nextNode) {
@@ -38,6 +41,39 @@ public class Vehicle {
     }
 
     public Path getPathToNode(ShippingNode target) {
+        if (target == this.currentNode) {
+            Path emptyPath = new Path();
+            emptyPath.setVehicle(this);
+            return emptyPath;
+        }
         return PathFinder.findPath(this.currentNode, target, this);
     }
+
+    public static ArrayList<Path> getBestVehicleCandidates(ShippingNode startNode,
+            ArrayList<Vehicle> vehicles) {
+        ArrayList<Path> vehiclePathsToStart = new ArrayList<>();
+
+        // find all the vehicles capable of reaching the starting node
+        for (Vehicle vehicle : vehicles) {
+            Path tentativeVehiclePath = vehicle.getPathToNode(startNode);
+            if (tentativeVehiclePath != null) {
+                tentativeVehiclePath.setVehicle(vehicle);
+                vehiclePathsToStart.add(tentativeVehiclePath);
+            }
+        }
+
+        // Prune all but the quickest path by type
+        Map<String, Path> bestPaths = new HashMap<>();
+
+        for (Path vehiclePath : vehiclePathsToStart) {
+            String type = vehiclePath.getVehicle().getType();
+            if (!bestPaths.containsKey(type) ||
+                    vehiclePath.getTime() < bestPaths.get(type).getTime()) {
+                bestPaths.put(type, vehiclePath);
+            }
+        }
+
+        return new ArrayList<>(bestPaths.values());
+    }
+
 }
