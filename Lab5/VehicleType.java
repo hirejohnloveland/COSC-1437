@@ -4,7 +4,7 @@ public enum VehicleType {
     ROAD(5, "road"),
     AIR(25, "air"),
     WATER(15, "water"),
-    RAIL(100, "rail");
+    RAIL(100, "train");
 
     private final int weight;
     private final String type;

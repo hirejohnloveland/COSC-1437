@@ -1,6 +1,8 @@
 package Lab5;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ShippingNode {
@@ -41,14 +43,6 @@ public class ShippingNode {
         this.neighbors.add(connection);
     }
 
-    /// Remove at when you add cargo
-    public static ShippingNode getNodeByName(ArrayList<ShippingNode> nodes, String name) {
-        return nodes.stream()
-                .filter(node -> name.equals(node.getName()))
-                .findFirst()
-                .orElse(null);
-    }
-
     public static void connectNeighbors(int id, ShippingNode fromNode, ShippingNode toNode, int cost, int time,
             VehicleType type) {
         ShippingNodeConnection newConnection = new ShippingNodeConnection(id, fromNode, toNode, cost, time, type);
@@ -58,21 +52,24 @@ public class ShippingNode {
     // Recursive call to traverse graph and remove the paths at the beginning
     // of each pass
     public void resetNodeAndAllOtherNodes() {
-        this.resetRecursively();
+        Map<String, ShippingNode> visitedNodes = new HashMap<>();
+        this.resetRecursively(visitedNodes);
     }
 
-    private void resetRecursively() {
-        if (this.getPath().isEmpty()) {
+    private void resetRecursively(Map<String, ShippingNode> visitedNodes) {
+        if (visitedNodes != null && visitedNodes.containsKey(this.getName())) {
             return;
         }
 
-        // Reset the current node
+        visitedNodes.put(this.getName(), this);
+
         this.setPath(new Path());
 
-        // Reset all neighbors
         for (ShippingNodeConnection connection : this.getNeighbors()) {
-            connection.getDestinationNode().resetRecursively();
+            connection.getDestinationNode().resetRecursively(visitedNodes);
         }
+
+        visitedNodes.remove(this.getName());
     }
 
     // Override to allow a comparison of nodes based on names using List.contains()

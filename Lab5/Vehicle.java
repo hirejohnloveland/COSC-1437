@@ -9,6 +9,7 @@ public class Vehicle {
     private VehicleType type;
     private String name;
     private ShippingNode currentNode;
+    private Path vehiclePath;
 
     public Vehicle(VehicleType vehicleType, String name, ShippingNode startingNode) {
         this.type = vehicleType;
