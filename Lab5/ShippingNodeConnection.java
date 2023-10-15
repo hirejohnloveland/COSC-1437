@@ -41,8 +41,8 @@ public class ShippingNodeConnection {
         return this.time;
     }
 
-    public VehicleType getType() {
-        return this.type;
+    public String getConnectionType() {
+        return this.type.getVehicleTypeName();
     }
 
     public boolean isSimilarConnection(ShippingNodeConnection testConnection) {

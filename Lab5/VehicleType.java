@@ -18,13 +18,13 @@ public enum VehicleType {
         return this.weight;
     }
 
-    public String getType() {
+    public String getVehicleTypeName() {
         return this.type;
     }
 
     public static VehicleType fromString(String typeStr) {
         for (VehicleType vehicleType : VehicleType.values()) {
-            if (vehicleType.getType().equalsIgnoreCase(typeStr)) {
+            if (vehicleType.getVehicleTypeName().equalsIgnoreCase(typeStr)) {
                 return vehicleType;
             }
         }

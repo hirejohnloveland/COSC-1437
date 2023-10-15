@@ -52,6 +52,6 @@ public class PathFinder {
 			}
 			closed.add(current);
 		}
-		return end.getPath().isEmpty() != true ? end.getPath() : null;
+		return end.getPath();
 	}
 }
