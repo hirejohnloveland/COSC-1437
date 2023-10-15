@@ -85,7 +85,6 @@ public class Shipment {
         this.reservedVehicle = null;
         shippingPath = PathFinder.findPath(sourceNode, destinationNode, null);
         eta = shippingPath.getTime();
-        System.out.println("Shipment has an eta of " + eta);
     }
 
 }
