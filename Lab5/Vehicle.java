@@ -1,79 +1,127 @@
 package Lab5;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Vehicle {
 
     private VehicleType type;
     private String name;
-    private ShippingNode currentNode;
+    private boolean isVehicleCommitted;
+    private Path pathToDestination;
+    private ShippingNode startNode;
+    private Shipment shipment;
+
+    public void setPathTopickup(Path pathToPickup) {
+        this.pathToDestination = pathToPickup;
+    }
+
+    public boolean isVehicleCommitted() {
+        return isVehicleCommitted;
+    }
 
     public Vehicle(VehicleType vehicleType, String name, ShippingNode startingNode) {
         this.type = vehicleType;
         this.name = name;
-        this.currentNode = startingNode;
+        this.isVehicleCommitted = false;
+        this.startNode = startingNode;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public String getType() {
-        return type.getType();
+    public String getVehicleTypeName() {
+        return type.getVehicleTypeName();
     }
 
-    public void setCurrentNode(ShippingNode nextNode) {
-        if (currentNode != nextNode) {
-            System.out
-                    .println("Vehicle " + name + " moved from " + currentNode.getName() + " to " + nextNode.getName());
-            this.currentNode = nextNode;
-        } else {
-            System.out.println("Vehicle " + name + " started and ended at " + currentNode.getName());
-        }
-
+    public void commitVehicleToShipment(Shipment shipment) {
+        isVehicleCommitted = true;
+        this.shipment = shipment;
     }
 
     public boolean canTraverse(ShippingNodeConnection connection) {
-        VehicleType connectionType = connection.getType();
-        return (connectionType.getType() == type.getType());
+        String connectionType = connection.getConnectionType();
+        return (connectionType == type.getVehicleTypeName());
     }
 
     public Path getPathToNode(ShippingNode target) {
-        if (target == this.currentNode) {
-            Path emptyPath = new Path();
-            emptyPath.setVehicle(this);
-            return emptyPath;
+        ShippingNode currentNode;
+        if (pathToDestination == null) {
+            currentNode = startNode;
+        } else {
+            currentNode = pathToDestination.getCurrentNode();
         }
-        return PathFinder.findPath(this.currentNode, target, this);
+        return PathFinder.findPath(currentNode, target, this);
     }
 
-    public static ArrayList<Path> getBestVehicleCandidates(ShippingNode startNode,
+    public void releaseVehicleFromShipment() {
+        shipment = null;
+        isVehicleCommitted = false;
+        pathToDestination = null;
+    }
+
+    public static Vehicle reserveVehicle(Shipment shipment,
             ArrayList<Vehicle> vehicles) {
-        ArrayList<Path> vehiclePathsToStart = new ArrayList<>();
 
-        // find all the vehicles capable of reaching the starting node
+        ShippingNode pickupLocation = shipment.getShippingPath().getCurrentNode();
+        String nextConnectionType = shipment.getNextConnection().getConnectionType();
+        int bestTime = Integer.MAX_VALUE;
+        Vehicle bestVehicle = null;
+        Path tentativeVehiclePath = new Path();
+
+        // find all the best vehicle capable of reaching the starting node
+        // and making the first connection.
         for (Vehicle vehicle : vehicles) {
-            Path tentativeVehiclePath = vehicle.getPathToNode(startNode);
-            if (tentativeVehiclePath != null) {
-                tentativeVehiclePath.setVehicle(vehicle);
-                vehiclePathsToStart.add(tentativeVehiclePath);
+            if (!vehicle.isVehicleCommitted() && nextConnectionType == vehicle.getVehicleTypeName()) {
+                tentativeVehiclePath = vehicle.getPathToNode(pickupLocation);
+                if (tentativeVehiclePath.getTime() < bestTime) {
+                    bestTime = tentativeVehiclePath.getTime();
+                    bestVehicle = vehicle;
+                }
             }
         }
 
-        // Prune all but the quickest path by type
-        Map<String, Path> bestPaths = new HashMap<>();
-
-        for (Path vehiclePath : vehiclePathsToStart) {
-            String type = vehiclePath.getVehicle().getType();
-            if (!bestPaths.containsKey(type) ||
-                    vehiclePath.getTime() < bestPaths.get(type).getTime()) {
-                bestPaths.put(type, vehiclePath);
+        if (bestVehicle == null) {
+            return bestVehicle;
+        } else {
+            // add the shipment path to the vehicle path
+            Path shipmentPath = shipment.getShippingPath().deepCopy();
+            for (ShippingNodeConnection connection : shipmentPath.getConnections()) {
+                tentativeVehiclePath.addConnectionToPath(connection);
             }
+            bestVehicle.commitVehicleToShipment(shipment);
+            bestVehicle.pathToDestination = tentativeVehiclePath;
+            return bestVehicle;
+        }
+    }
+
+    public void advanceVehicle() {
+        // Check if the shipment is on the vehicle
+
+        ShippingNode vehicleNode = this.getCurrentNode();
+        ShippingNode shipmentNode = shipment.getCurrentNode();
+        if (vehicleNode == shipmentNode) {
+            // Check if the shipment is at it's destination, or if the vehicle cannnot make
+            // the next connection.
+            if (shipment.getCurrentNode() == shipment.getDestinationNode()
+                    || shipment.getNextConnection().getConnectionType() != this.getVehicleTypeName()) {
+                shipment.releaseShipmentFromVehicle();
+                releaseVehicleFromShipment();
+                return;
+            } else {
+                pathToDestination.advancePath();
+                shipment.advanceShipment();
+            }
+        } else {
+
+            shipment.addTransitTime(pathToDestination.getNextConnection().getTime());
+            pathToDestination.advancePath();
         }
 
-        return new ArrayList<>(bestPaths.values());
+    }
+
+    private ShippingNode getCurrentNode() {
+        return pathToDestination.getCurrentNode();
     }
 
 }

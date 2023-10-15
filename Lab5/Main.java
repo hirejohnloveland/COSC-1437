@@ -8,7 +8,7 @@ public class Main {
         FileParser reader = new FileParser("squares.txt");
         FileData data = reader.readFile();
 
-        FlowController flow = new FlowController();
-        flow.optimizeNetwork(data.nodes, data.vehicles);
+        FlowController flowController = new FlowController(data);
+        flowController.optimizeNetwork();
     }
 }
