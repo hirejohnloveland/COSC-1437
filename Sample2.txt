@@ -1,0 +1,69 @@
+::Start
+Hello
+How can I help you
+[[Loops@Loops]]
+[[If_Statements@If]]
+[[end@end]]
+[[set@set]]
+[[get@get]]
+[[iftest@test]]
+
+::Loops
+There are 3 kinds of loops which would you like to know about?
+[[For Loops@For]]
+[[While Loops@While]]
+[[Do While Loops@DoWhile]]
+
+::For
+The for loops looks like:
+for (int i=0;i<10;i++)
+This will run 10 times
+[[Start@Start]]
+
+::While
+The while loops looks like:
+int i=0;
+while (i++ < 10)
+{
+
+}
+This will run 10 times
+[[Start@Start]]
+
+::DoWhile
+The do while loops looks like:
+int i=0;
+do
+{
+
+}
+while (i++ < 10);
+This will run 10 times
+This is the only postfix loop structure
+[[Start@Start]]
+
+::If
+Ooo, If statements are fun. They can evaluate a condition and select a line of code to run
+[[More_If_Statements@MoreIf]]
+
+::MoreIf
+If statements are classified as selection statements. 
+Other forms include the switch statement and the short-hand-if, or tertiary operator.
+[[Start@Start]]
+
+::end
+Goodbye
+
+::set
+<<set $AcceptMission = 1>>
+[[Start@Start]]
+
+::get
+<<get $AcceptMission>>
+[[Start@Start]]
+
+::test
+<<if @$AcceptMission = 1 @Var is set@Var is not set>>
+[[Start@Start]]
+
+<<declare $AcceptMission>>
